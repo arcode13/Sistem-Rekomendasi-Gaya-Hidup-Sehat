@@ -1,0 +1,58 @@
+# services:
+#   surrealdb:
+#     image: surrealdb/surrealdb:v2
+#     volumes:
+#       - ./surreal_data:/mydata
+#     environment:
+#       - SURREAL_EXPERIMENTAL_GRAPHQL=true
+#     command: start --log info --user root --pass root rocksdb:/mydata/mydatabase.db
+#     pull_policy: always
+#     user: root
+#     restart: always
+#   open_notebook:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     ports:
+#       - "8502:8502"
+#       - "5055:5055"
+#     env_file:
+#       - ./docker.env
+#     depends_on:
+#       - surrealdb
+#     volumes:
+#       - ./notebook_data:/app/data
+#     restart: always
+    
+services:
+  surrealdb:
+    image: surrealdb/surrealdb:v2
+    user: root
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./surreal_data:/mydata
+    environment:
+      - SURREAL_EXPERIMENTAL_GRAPHQL=true
+    command: start --log info --user root --pass root rocksdb:/mydata/mydatabase.db
+    restart: always
+
+  open_notebook:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8502:8502"
+      - "5055:5055"
+      - "3000:3000"
+    env_file:
+      - ./docker.env
+    volumes:
+      - ./api:/app/api
+      - ./open_notebook:/app/open_notebook
+      - ./frontend:/app/frontend
+      - ./notebook_data:/app/data
+    depends_on:
+      - surrealdb
+    restart: always
+

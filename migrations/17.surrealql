@@ -1,0 +1,80 @@
+-- Remove note table and all related data
+-- This migration removes the note feature completely from the database
+
+-- 1. Remove note table
+REMOVE TABLE IF EXISTS note;
+
+-- 2. Remove all artifact relationships (note to notebook relationships)
+DELETE artifact WHERE in.type = 'note';
+
+-- 3. Remove note embeddings
+DELETE note_embedding WHERE EXISTS;
+
+-- 4. Remove indexes for note (if any)
+REMOVE INDEX IF EXISTS idx_note ON TABLE note;
+REMOVE INDEX IF EXISTS idx_note_title ON TABLE note;
+
+-- 5. Update all notebooks to remove note_count field (if exists)
+UPDATE notebook UNSET note_count;
+
+-- 6. Update fn::text_search to remove note references
+REMOVE FUNCTION IF EXISTS fn::text_search;
+DEFINE FUNCTION IF NOT EXISTS fn::text_search($query_text: string, $match_count: int, $sources:bool) {
+  
+    let $source_title_search = 
+        IF $sources {(
+            SELECT id as item_id, math::max(search::score(1)) AS relevance
+            FROM source
+            WHERE title @1@ $query_text
+            GROUP BY item_id)}
+        ELSE { [] };
+    
+    let $source_embedding_search = 
+         IF $sources {(
+             SELECT source as item_id, math::max(search::score(1)) AS relevance
+            FROM source_embedding
+            WHERE content @1@ $query_text
+            GROUP BY item_id)}
+        ELSE { [] };
+
+    let $source_full_search = 
+         IF $sources {(
+            SELECT source as item_id, math::max(search::score(1)) AS relevance
+            FROM source
+            WHERE full_text @1@ $query_text
+            GROUP BY item_id)}
+        ELSE { [] };
+    
+    let $final_results = $source_title_search;
+    let $source_chunk_results = array::union($source_embedding_search, $source_full_search);
+    let $source_results = array::union($source_chunk_results, $source_title_search);
+
+    RETURN (SELECT item_id, math::max(relevance) as relevance from $source_results
+        group by item_id ORDER BY relevance DESC LIMIT $match_count);
+};
+
+-- 7. Update fn::vector_search to remove note references
+REMOVE FUNCTION IF EXISTS fn::vector_search;
+DEFINE FUNCTION IF NOT EXISTS fn::vector_search($query: array<float>, $match_count: int, $sources: bool, $min_similarity: float) {
+    let $source_embedding_search = 
+        IF $sources {(
+            SELECT 
+                source.id as id,
+                source.title as title,
+                content,
+                source.id as parent_id,
+                vector::similarity::cosine(embedding, $query) as similarity
+            FROM source_embedding 
+            WHERE embedding != none and array::len(embedding)=array::len($query) AND
+                 vector::similarity::cosine(embedding, $query) >= $min_similarity
+            ORDER BY similarity DESC
+            LIMIT $match_count
+        )}
+        ELSE { [] };
+
+    RETURN (select id, parent_id, title, math::max(similarity) as similarity,
+    array::flatten(content) as matches
+    from $source_embedding_search where id is not None
+    group by id, parent_id, title ORDER BY similarity DESC LIMIT $match_count);
+};
+

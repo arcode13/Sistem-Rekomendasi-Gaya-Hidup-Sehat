@@ -1,0 +1,6 @@
+-- Rollback: Remove evaluation_inclusion table
+-- This migration removes the evaluation_inclusion table and all related data
+
+REMOVE INDEX IF EXISTS idx_evaluation_inclusion_composite ON TABLE evaluation_inclusion;
+REMOVE INDEX IF EXISTS idx_evaluation_inclusion_session ON TABLE evaluation_inclusion;
+REMOVE TABLE IF EXISTS evaluation_inclusion;

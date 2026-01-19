@@ -1,0 +1,2 @@
+REMOVE TABLE health_examination;
+REMOVE TABLE health_chat_session;

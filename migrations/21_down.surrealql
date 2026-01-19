@@ -1,0 +1,8 @@
+-- Rollback: Remove default Perawat user
+-- This migration removes the default admin user created by migration 21
+-- NOTE: This will only run if you explicitly rollback migration 21
+-- It will NOT run during normal migration up process
+--
+-- Rollback is disabled for safety - user data will not be deleted
+-- If you need to remove the user, do it manually via Surrealist or API
+

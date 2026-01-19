@@ -1,0 +1,16 @@
+-- Rollback for user table and health_chat_session enhancements
+
+REMOVE INDEX IF EXISTS idx_health_chat_session_user        ON TABLE health_chat_session;
+REMOVE INDEX IF EXISTS idx_health_chat_session_examination ON TABLE health_chat_session;
+REMOVE INDEX IF EXISTS idx_health_chat_session_created     ON TABLE health_chat_session;
+
+REMOVE FIELD IF EXISTS user_id        ON TABLE health_chat_session;
+REMOVE FIELD IF EXISTS examination_id ON TABLE health_chat_session;
+REMOVE FIELD IF EXISTS title          ON TABLE health_chat_session;
+REMOVE FIELD IF EXISTS created        ON TABLE health_chat_session;
+REMOVE FIELD IF EXISTS updated        ON TABLE health_chat_session;
+
+REMOVE INDEX IF EXISTS idx_user_email ON TABLE user;
+REMOVE INDEX IF EXISTS idx_user_phone ON TABLE user;
+
+REMOVE TABLE IF EXISTS user;

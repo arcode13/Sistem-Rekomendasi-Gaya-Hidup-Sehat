@@ -1,0 +1,14 @@
+-- Auto-insert default Perawat user
+-- This migration creates a default admin user with role "Perawat" if it doesn't exist
+
+-- Check if user with role "Perawat" already exists, if not, create one
+IF array::len(SELECT * FROM user WHERE role = "Perawat" LIMIT 1) == 0 THEN
+    CREATE user SET
+        email = "perawat@gmail.com",
+        password_hash = "$2a$12$M5rwh/HsvCFn3/qt.VTFrOkyhNKHVYHlzPFFuBJjWOR5KxUnMSxr6",
+        name = "Admin",
+        role = "Perawat",
+        is_active = true,
+        created = time::now(),
+        updated = time::now();
+END;

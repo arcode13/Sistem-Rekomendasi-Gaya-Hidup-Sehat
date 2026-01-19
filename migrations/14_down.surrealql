@@ -1,0 +1,3 @@
+-- Remove gender field from user table
+REMOVE FIELD gender ON user;
+

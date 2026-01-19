@@ -1,0 +1,2 @@
+-- Remove default notebook if it exists
+DELETE notebook:default;

@@ -1,0 +1,4 @@
+-- Rollback: Re-add deprecated fields (not recommended, but available for rollback)
+-- Note: These fields are deprecated and should not be used
+
+UPDATE open_notebook:content_settings SET auto_delete_files = "no", youtube_preferred_languages = ["en", "pt", "es", "de", "nl", "en-GB", "fr", "hi", "ja"];

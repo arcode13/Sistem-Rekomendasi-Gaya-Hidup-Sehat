@@ -1,0 +1,7 @@
+-- Remove session token field and index from user
+
+REMOVE INDEX IF EXISTS idx_user_session_token ON TABLE user;
+
+REMOVE FIELD IF EXISTS session_token ON TABLE user;
+
+

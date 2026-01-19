@@ -1,0 +1,9 @@
+-- Remove archived field from notebook table
+-- This migration removes the archived field which is no longer used in the application
+
+-- 1. Remove archived field from all notebook records
+UPDATE notebook UNSET archived;
+
+-- 2. Remove field definition from schema (for SCHEMAFULL tables)
+REMOVE FIELD IF EXISTS archived ON TABLE notebook;
+

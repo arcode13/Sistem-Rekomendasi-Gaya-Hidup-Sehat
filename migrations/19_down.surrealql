@@ -1,0 +1,5 @@
+-- Rollback: Remove role field from user table
+
+UPDATE user UNSET role;
+REMOVE FIELD IF EXISTS role ON TABLE user;
+

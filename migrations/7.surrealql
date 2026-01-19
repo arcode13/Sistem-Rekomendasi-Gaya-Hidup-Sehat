@@ -1,0 +1,24 @@
+-- User table for authentication and profile data
+DEFINE TABLE IF NOT EXISTS user SCHEMAFULL;
+
+DEFINE FIELD IF NOT EXISTS email         ON user TYPE string;
+DEFINE FIELD IF NOT EXISTS name          ON user TYPE option<string>;
+DEFINE FIELD IF NOT EXISTS phone         ON user TYPE option<string>;
+DEFINE FIELD IF NOT EXISTS password_hash ON user TYPE string;
+DEFINE FIELD IF NOT EXISTS is_active     ON user TYPE bool DEFAULT true;
+DEFINE FIELD IF NOT EXISTS created       ON user TYPE datetime DEFAULT time::now();
+DEFINE FIELD IF NOT EXISTS updated       ON user TYPE datetime DEFAULT time::now();
+
+DEFINE INDEX IF NOT EXISTS idx_user_email ON user FIELDS email UNIQUE;
+DEFINE INDEX IF NOT EXISTS idx_user_phone ON user FIELDS phone;
+
+-- Health chat session fields for history
+DEFINE FIELD IF NOT EXISTS user_id        ON health_chat_session TYPE option<string>;
+DEFINE FIELD IF NOT EXISTS examination_id ON health_chat_session TYPE option<string>;
+DEFINE FIELD IF NOT EXISTS title          ON health_chat_session TYPE option<string>;
+DEFINE FIELD IF NOT EXISTS created        ON health_chat_session TYPE datetime DEFAULT time::now();
+DEFINE FIELD IF NOT EXISTS updated        ON health_chat_session TYPE datetime DEFAULT time::now();
+
+DEFINE INDEX IF NOT EXISTS idx_health_chat_session_user        ON health_chat_session FIELDS user_id;
+DEFINE INDEX IF NOT EXISTS idx_health_chat_session_examination ON health_chat_session FIELDS examination_id;
+DEFINE INDEX IF NOT EXISTS idx_health_chat_session_created     ON health_chat_session FIELDS created;

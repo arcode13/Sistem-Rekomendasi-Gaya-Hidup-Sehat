@@ -1,0 +1,13 @@
+-- Remove optional fields from health_examination table
+-- This migration removes the optional fields: cholesterol, glucose, smoking, alcohol, physical_activity
+
+-- 1. Remove fields from all records
+UPDATE health_examination UNSET cholesterol, glucose, smoking, alcohol, physical_activity;
+
+-- 2. Remove field definitions from schema
+REMOVE FIELD IF EXISTS cholesterol ON TABLE health_examination;
+REMOVE FIELD IF EXISTS glucose ON TABLE health_examination;
+REMOVE FIELD IF EXISTS smoking ON TABLE health_examination;
+REMOVE FIELD IF EXISTS alcohol ON TABLE health_examination;
+REMOVE FIELD IF EXISTS physical_activity ON TABLE health_examination;
+

@@ -1,0 +1,49 @@
+FROM python:3.12-slim-bookworm
+
+# ====== System Dependencies ======
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
+    gcc g++ git make curl ffmpeg supervisor \
+    && rm -rf /var/lib/apt/lists/*
+
+# ====== Install NVM + Node.js 20 ======
+ENV NVM_DIR=/usr/local/nvm
+ENV NODE_VERSION=20
+
+RUN mkdir -p $NVM_DIR \
+    && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash \
+    && . $NVM_DIR/nvm.sh \
+    && nvm install $NODE_VERSION \
+    && nvm alias default $NODE_VERSION \
+    && nvm use default
+
+ENV PATH="$NVM_DIR/versions/node/v$NODE_VERSION/bin/:$PATH"
+
+# ====== Install uv ======
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+WORKDIR /app
+
+# ====== Install Python Dependencies ======
+COPY pyproject.toml uv.lock ./ 
+COPY api ./api
+COPY open_notebook ./open_notebook
+
+RUN uv sync --no-dev
+
+# ====== Copy full source for dev ======
+COPY . /app
+
+EXPOSE 8502 5055 3000
+
+# Set environment variables for polling-based file watching (Windows Docker compatibility)
+ENV WATCHPACK_POLLING=true
+ENV CHOKIDAR_USEPOLLING=true
+ENV CHOKIDAR_INTERVAL=1000
+
+CMD /bin/bash -c "\
+    source /usr/local/nvm/nvm.sh && \
+    cd frontend && npm install && \
+    npx next dev -p 8502 & \
+    uv run uvicorn api.main:app --reload --reload-dir /app/api --reload-dir /app/open_notebook --host 0.0.0.0 --port 5055 --reload-include '*.py' && \
+    wait \
+"

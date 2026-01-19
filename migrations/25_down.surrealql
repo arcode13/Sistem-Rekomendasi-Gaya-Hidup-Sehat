@@ -1,0 +1,10 @@
+DEFINE TABLE IF NOT EXISTS evaluation_inclusion SCHEMAFULL;
+
+DEFINE FIELD session_id ON TABLE evaluation_inclusion TYPE string;
+DEFINE FIELD message_index ON TABLE evaluation_inclusion TYPE int;
+DEFINE FIELD included ON TABLE evaluation_inclusion TYPE bool DEFAULT true;
+DEFINE FIELD created ON TABLE evaluation_inclusion TYPE datetime DEFAULT time::now();
+DEFINE FIELD updated ON TABLE evaluation_inclusion TYPE datetime DEFAULT time::now();
+
+DEFINE INDEX idx_evaluation_inclusion_session ON evaluation_inclusion FIELDS session_id;
+DEFINE INDEX idx_evaluation_inclusion_composite ON evaluation_inclusion FIELDS session_id, message_index UNIQUE;

@@ -1,0 +1,2 @@
+DEFINE FIELD IF NOT EXISTS chat_include ON TABLE source TYPE option<string> DEFAULT 'full';
+DEFINE FIELD IF NOT EXISTS chat_include ON TABLE note TYPE option<string> DEFAULT 'full';

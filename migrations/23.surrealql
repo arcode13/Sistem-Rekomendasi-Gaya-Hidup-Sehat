@@ -1,0 +1,10 @@
+-- Add TruLens toggle flag on open_notebook settings
+DEFINE FIELD IF NOT EXISTS trulens_enabled ON TABLE open_notebook TYPE bool DEFAULT true;
+
+-- Ensure settings record exists
+IF array::len((SELECT * FROM open_notebook WHERE id = type::thing('open_notebook', 'trulens_settings'))) == 0 THEN
+  CREATE open_notebook:trulens_settings SET
+    trulens_enabled = true,
+    created = time::now(),
+    updated = time::now();
+END;

@@ -1,0 +1,10 @@
+DEFINE TABLE IF NOT EXISTS password_reset_token SCHEMAFULL;
+
+DEFINE FIELD user_id ON TABLE password_reset_token TYPE string;
+DEFINE FIELD reset_token ON TABLE password_reset_token TYPE string;
+DEFINE FIELD expires_at ON TABLE password_reset_token TYPE datetime;
+DEFINE FIELD used ON TABLE password_reset_token TYPE bool DEFAULT false;
+DEFINE FIELD created ON TABLE password_reset_token TYPE datetime DEFAULT time::now();
+
+DEFINE INDEX idx_password_reset_token ON password_reset_token FIELDS reset_token UNIQUE;
+DEFINE INDEX idx_password_reset_user ON password_reset_token FIELDS user_id;

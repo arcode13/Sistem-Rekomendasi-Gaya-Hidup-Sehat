@@ -1,0 +1,13 @@
+-- Add optional fields to health_examination table
+-- This migration adds optional fields: cholesterol, glucose, smoking, alcohol, physical_activity
+
+-- 1. Initialize optional fields for existing records (set to NONE)
+UPDATE health_examination SET cholesterol = NONE, glucose = NONE, smoking = NONE, alcohol = NONE, physical_activity = NONE;
+
+-- 2. Define optional fields in schema
+DEFINE FIELD IF NOT EXISTS cholesterol ON TABLE health_examination TYPE option<int>;
+DEFINE FIELD IF NOT EXISTS glucose ON TABLE health_examination TYPE option<int>;
+DEFINE FIELD IF NOT EXISTS smoking ON TABLE health_examination TYPE option<int>;
+DEFINE FIELD IF NOT EXISTS alcohol ON TABLE health_examination TYPE option<int>;
+DEFINE FIELD IF NOT EXISTS physical_activity ON TABLE health_examination TYPE option<int>;
+

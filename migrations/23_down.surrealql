@@ -1,0 +1,3 @@
+-- Remove TruLens toggle flag and settings record
+REMOVE FIELD IF EXISTS trulens_enabled ON TABLE open_notebook;
+DELETE open_notebook:trulens_settings;

@@ -1,0 +1,6 @@
+-- Add session token field for user authentication
+DEFINE FIELD IF NOT EXISTS session_token ON user TYPE option<string>;
+
+DEFINE INDEX IF NOT EXISTS idx_user_session_token ON user FIELDS session_token;
+
+

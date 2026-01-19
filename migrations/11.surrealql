@@ -1,0 +1,20 @@
+DEFINE TABLE health_examination SCHEMAFULL;
+DEFINE FIELD user_id ON health_examination TYPE option<string>;
+DEFINE FIELD age ON health_examination TYPE int;
+DEFINE FIELD gender ON health_examination TYPE int;
+DEFINE FIELD height ON health_examination TYPE float;
+DEFINE FIELD weight ON health_examination TYPE float;
+DEFINE FIELD systolic_bp ON health_examination TYPE int;
+DEFINE FIELD diastolic_bp ON health_examination TYPE int;
+DEFINE FIELD bmi ON health_examination TYPE float;
+DEFINE FIELD pulse_pressure ON health_examination TYPE float;
+DEFINE FIELD risk_level ON health_examination TYPE string;
+DEFINE FIELD prediction_proba ON health_examination TYPE float;
+DEFINE FIELD created ON health_examination TYPE datetime DEFAULT time::now();
+DEFINE FIELD updated ON health_examination TYPE datetime DEFAULT time::now();
+
+DEFINE TABLE health_chat_session SCHEMALESS;
+
+DEFINE INDEX idx_health_examination_user ON health_examination FIELDS user_id;
+DEFINE INDEX idx_health_examination_created ON health_examination FIELDS created;
+DEFINE INDEX idx_health_chat_session_examination ON health_chat_session FIELDS examination_id;

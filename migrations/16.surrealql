@@ -1,0 +1,5 @@
+-- Remove deprecated fields from content_settings
+-- This migration removes auto_delete_files and youtube_preferred_languages
+-- which are no longer used in the application
+
+UPDATE open_notebook:content_settings UNSET auto_delete_files, youtube_preferred_languages

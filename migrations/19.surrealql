@@ -1,0 +1,9 @@
+-- Add role field to user table
+-- This migration adds role field to distinguish between "Pasien" (from /health) and "Pengguna" (from admin)
+
+-- 1. Add role field to all existing users (default to "Pasien" for existing users)
+UPDATE user SET role = "Pasien" WHERE role == NONE;
+
+-- 2. Define role field in schema
+DEFINE FIELD IF NOT EXISTS role ON TABLE user TYPE option<string> DEFAULT "Pasien";
+

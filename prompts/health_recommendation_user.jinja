@@ -1,0 +1,78 @@
+Berdasarkan hasil pemeriksaan kesehatan berikut:
+- Usia: {{age}} tahun
+- Jenis Kelamin: {{gender_text}}
+- Tinggi Badan: {{height}} cm
+- Berat Badan: {{weight}} kg
+- Tekanan Darah: {{systolic_bp}}/{{diastolic_bp}} mmHg
+- BMI: {{bmi}}
+- Tingkat Risiko: {{risk_level_text}} (probabilitas risiko kesehatan: {{prob_disease}}%)
+{% if cholesterol is defined %}
+- Kolesterol: {{cholesterol_text}}
+{% endif %}
+{% if glucose is defined %}
+- Glukosa: {{glucose_text}}
+{% endif %}
+{% if smoking is defined %}
+- Kebiasaan Merokok: {{smoking_text}}
+{% endif %}
+{% if alcohol is defined %}
+- Konsumsi Alkohol: {{alcohol_text}}
+{% endif %}
+{% if physical_activity is defined %}
+- Aktivitas Fisik: {{physical_activity_text}}
+{% endif %}
+
+Berikan rekomendasi gaya hidup sehat dalam bahasa Indonesia yang mudah dipahami untuk berbagai tingkat pendidikan (SD, SMP, SMA, S1, S2). 
+
+**PENTING - PENGGUNAAN KATA GANTI:**
+- WAJIB menggunakan "Anda" untuk merujuk langsung ke pengguna yang meminta rekomendasi
+- JANGAN menggunakan "seseorang" atau "pengguna" - rekomendasi harus personal dan langsung merujuk ke pengguna
+- Contoh: "Berdasarkan hasil pemeriksaan kesehatan Anda..." bukan "Berdasarkan hasil pemeriksaan kesehatan seseorang..." 
+
+**WAJIB menggunakan bahasa yang:**
+- Sederhana dan jelas, hindari istilah medis kompleks tanpa penjelasan
+- Jika harus menggunakan istilah medis, jelaskan dengan kata-kata sederhana
+- Gunakan kalimat pendek dan jelas (maksimal 20 kata per kalimat)
+- Gunakan contoh konkret yang mudah dipahami
+- Hindari jargon medis yang tidak perlu
+- Ramah, positif, dan tidak mengintimidasi
+
+**Contoh bahasa yang BENAR:**
+- "Berjalan kaki 30 menit setiap hari dapat membantu menjaga kesehatan jantung [source:abc123]."
+- "Makan makanan yang mengandung serat, seperti sayur dan buah, dapat membantu menjaga kadar gula darah tetap normal [source:abc123]."
+
+**Contoh bahasa yang SALAH (terlalu kompleks):**
+- "Melakukan aktivitas fisik aerobik dengan intensitas sedang hingga tinggi secara teratur dapat meningkatkan fungsi kardiovaskular."
+- "Konsumsi makanan dengan indeks glikemik rendah dan kandungan serat tinggi dapat membantu regulasi homeostasis glukosa."
+
+{% if available_ids %}
+**CRITICAL GROUNDEDNESS REQUIREMENT (WAJIB DIIKUTI)**: 
+- **HANYA** berikan rekomendasi yang **SECARA EKSPLISIT** ada di CONTEXT/referensi
+- **DILARANG KERAS** menambahkan info dari pengetahuan umum
+- **SETIAP** rekomendasi spesifik (angka, durasi, frekuensi, jenis makanan, jenis aktivitas) **HARUS** ada citation [source:id] TEPAT setelah informasi tersebut
+- Jika info tidak ada di CONTEXT, gunakan frasa umum seperti "disarankan untuk berkonsultasi dengan dokter" atau skip informasi tersebut
+- **Minimal 95%** dari jawaban harus grounded in CONTEXT
+- **PRIORITAS**: Lebih baik memberikan rekomendasi yang lebih sedikit tapi semua grounded daripada banyak tapi tidak grounded
+- **CITATION FORMAT**: Setiap informasi spesifik HARUS diikuti dengan [source:id] - contoh: "Aktivitas fisik minimal 150 menit per minggu [source:abc123]"
+{% else %}
+**TANPA REFERENSI**: Berikan rekomendasi umum saja tanpa detail spesifik. Jangan menambahkan angka, durasi, atau rekomendasi spesifik.
+{% endif %}
+
+**WAJIB - PROBABILITAS RISIKO KESEHATAN:**
+- **HARUS** menyebutkan probabilitas risiko kesehatan ({{prob_disease}}%) di bagian awal rekomendasi
+- **PENTING**: Probabilitas ini adalah **indikator risiko kesehatan secara umum** berdasarkan faktor risiko (tekanan darah, BMI, kolesterol, glukosa, dll), **BUKAN** diagnosis penyakit spesifik seperti sakit jantung, diabetes, atau penyakit tertentu lainnya
+- Probabilitas ini menunjukkan seberapa besar kemungkinan seseorang mengalami masalah kesehatan di masa depan berdasarkan faktor risiko yang ada
+- **JANGAN** menyebutkan penyakit spesifik (seperti "sakit jantung", "diabetes", dll) ketika menjelaskan probabilitas ini
+- Contoh yang BENAR: "Berdasarkan hasil pemeriksaan kesehatan Anda, probabilitas risiko kesehatan sebesar {{prob_disease}}% yang menunjukkan tingkat risiko {{risk_level_text}}. Probabilitas ini merupakan indikator risiko kesehatan secara umum berdasarkan faktor risiko yang terdeteksi, bukan diagnosis penyakit spesifik..."
+- Contoh yang SALAH: "Probabilitas penyakit sebesar {{prob_disease}}% (sakit jantung)" - JANGAN lakukan ini
+- JANGAN lupa menyebutkan probabilitas risiko kesehatan - ini informasi penting yang harus selalu ada
+
+Fokus pada:
+1. **WAJIB**: Sebutkan probabilitas risiko kesehatan ({{prob_disease}}%) dan tingkat risiko ({{risk_level_text}}) di bagian awal rekomendasi, dengan penjelasan bahwa ini adalah indikator risiko kesehatan umum, BUKAN diagnosis penyakit spesifik
+2. Penjelasan singkat tentang kondisi kesehatan berdasarkan hasil pemeriksaan
+3. Rekomendasi pola makan yang sehat{% if available_ids %} (WAJIB gunakan referensi jika ada){% endif %}
+4. Rekomendasi aktivitas fisik{% if available_ids %} (WAJIB gunakan referensi jika ada){% endif %}
+5. Tips gaya hidup sehat lainnya yang relevan{% if available_ids %} (WAJIB gunakan referensi jika ada){% endif %}
+6. Catatan penting bahwa ini adalah informasi edukatif dan tidak menggantikan konsultasi medis profesional
+
+Format jawaban dalam bentuk narasi yang ramah dan mudah dipahami{% if available_ids %}, dengan citation yang jelas untuk setiap informasi yang berasal dari referensi{% endif %}.

@@ -1,0 +1,5 @@
+-- Rollback: Re-add archived field (not recommended, but available for rollback)
+-- Note: This field is deprecated and should not be used
+
+DEFINE FIELD IF NOT EXISTS archived ON TABLE notebook TYPE option<bool> DEFAULT False;
+

@@ -1,0 +1,5 @@
+-- Rollback: Remove note table and all related data
+-- This migration removes the note feature completely from the database
+-- NOTE: This is a destructive operation and cannot be fully reversed
+-- Migration 17 removes the note table, so rollback is not applicable
+

@@ -1,0 +1,6 @@
+-- Create default notebook if none exists
+IF array::len(select * from notebook) == 0 THEN
+    CREATE notebook:default SET
+    created = time::now(),
+    updated = time::now()
+END;

@@ -1,0 +1,15 @@
+DEFINE TABLE IF NOT EXISTS transformation SCHEMAFULL;
+DEFINE FIELD IF NOT EXISTS name ON TABLE transformation TYPE string;
+DEFINE FIELD IF NOT EXISTS title ON TABLE transformation TYPE string;
+DEFINE FIELD IF NOT EXISTS description ON TABLE transformation TYPE string;
+DEFINE FIELD IF NOT EXISTS prompt ON TABLE transformation TYPE string;
+DEFINE FIELD IF NOT EXISTS apply_default ON TABLE transformation TYPE bool DEFAULT False;
+DEFINE FIELD IF NOT EXISTS created ON transformation DEFAULT time::now() VALUE $before OR time::now();
+DEFINE FIELD IF NOT EXISTS updated ON transformation DEFAULT time::now() VALUE time::now();
+
+DEFINE TABLE IF NOT EXISTS source_insight SCHEMAFULL;
+DEFINE FIELD IF NOT EXISTS source ON TABLE source_insight TYPE record<source>;
+DEFINE FIELD IF NOT EXISTS insight_type ON TABLE source_insight TYPE string;
+DEFINE FIELD IF NOT EXISTS content ON TABLE source_insight TYPE string;
+DEFINE FIELD IF NOT EXISTS embedding ON TABLE source_insight TYPE array<float>;
+

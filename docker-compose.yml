@@ -1,0 +1,41 @@
+services:
+  surrealdb:
+    image: surrealdb/surrealdb:v2
+    volumes:
+      - ./surreal_data:/mydata
+    environment:
+      - SURREAL_EXPERIMENTAL_GRAPHQL=true
+    ports:
+      - "8000:8000"
+    command: start --log info --user root --pass root rocksdb:/mydata/mydatabase.db
+    pull_policy: missing
+    user: root
+    restart: always
+
+  trulens_service:
+    build:
+      context: ./trulens-service
+      dockerfile: Dockerfile
+    ports:
+      - "5056:5056"
+    env_file:
+      - ./docker.env
+    restart: always
+
+  open_notebook:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8502:8502"
+      - "5055:5055"
+    env_file:
+      - ./docker.env
+    environment:
+      - TRULENS_SERVICE_URL=http://trulens_service:5056
+    depends_on:
+      - surrealdb
+      - trulens_service
+    volumes:
+      - ./notebook_data:/app/data
+    restart: always

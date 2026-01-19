@@ -1,0 +1,2 @@
+REMOVE FIELD chat_include ON TABLE source;
+REMOVE FIELD chat_include ON TABLE note;
